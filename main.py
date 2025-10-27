@@ -28,7 +28,7 @@ def main(page: ft.Page):
         size=16,
         weight=ft.FontWeight.BOLD
     )
-
+#l
     # TextField per responsabile
     input_responsabile = ft.TextField(value=autonoleggio.responsabile, label="Responsabile")
 
