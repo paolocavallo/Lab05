@@ -28,7 +28,7 @@ def main(page: ft.Page):
         size=16,
         weight=ft.FontWeight.BOLD
     )
-#l
+
     # TextField per responsabile
     input_responsabile = ft.TextField(value=autonoleggio.responsabile, label="Responsabile")
 
@@ -37,6 +37,23 @@ def main(page: ft.Page):
 
     # Tutti i TextField per le info necessarie per aggiungere una nuova automobile (marca, modello, anno, contatore posti)
     # TODO
+    txt_marca = ft.TextField(value="Marca")
+    txt_modello = ft.TextField(value="Modello")
+    txt_anno = ft.TextField(value="Anno")
+    num_posti = ft.TextField(value=0)
+    def handlerPlus(e):
+        currentVal = int(num_posti.value)
+        currentVal = currentVal + 1
+        num_posti.value = currentVal
+        num_posti.update()
+
+    def handlerMinus(e):
+        currentVal = int(num_posti.value)
+        if currentVal > 0:
+            currentVal = currentVal - 1
+            num_posti.value = currentVal
+            num_posti.update()
+
 
     # --- FUNZIONI APP ---
     def aggiorna_lista_auto():
@@ -59,6 +76,17 @@ def main(page: ft.Page):
 
     # Handlers per la gestione dei bottoni utili all'inserimento di una nuova auto
     # TODO
+    def conferma_auto(e):
+        try:
+            autonoleggio.aggiungi_automobile(txt_marca.value, txt_modello.value, txt_anno.value, num_posti.value)
+            aggiorna_lista_auto()
+            txt_marca.value = "marca"
+            txt_modello.value = "modello"
+            txt_anno.value = "anno"
+            num_posti.value = 0
+            page.update()
+        except:
+            alert.show_alert("❌ Errore: inserisci i valori numerici validi per anno e posti")
 
     # --- EVENTI ---
     toggle_cambia_tema = ft.Switch(label="Tema scuro", value=True, on_change=cambia_tema)
@@ -66,7 +94,9 @@ def main(page: ft.Page):
 
     # Bottoni per la gestione dell'inserimento di una nuova auto
     # TODO
-
+    btnPlus = ft.IconButton(icon=ft.Icons.ADD_CIRCLE_ROUNDED, icon_size=24, on_click=handlerPlus)
+    btnMinus = ft.IconButton(icon=ft.Icons.REMOVE_CIRCLE_ROUNDED, icon_size=24, on_click=handlerMinus)
+    pulsante_conferma_auto = ft.ElevatedButton("Conferma l'auto", on_click=conferma_auto)
     # --- LAYOUT ---
     page.add(
         toggle_cambia_tema,
@@ -84,7 +114,9 @@ def main(page: ft.Page):
 
         # Sezione 3
         # TODO
-
+        ft.Divider(),
+        ft.Text("Aggiungi automobile", size=20),
+        ft.Row([txt_marca, txt_modello, txt_anno, num_posti, btnPlus, btnMinus], alignment=ft.MainAxisAlignment.CENTER), pulsante_conferma_auto,
         # Sezione 4
         ft.Divider(),
         ft.Text("Automobili", size=20),
